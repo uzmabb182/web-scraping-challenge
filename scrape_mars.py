@@ -68,7 +68,7 @@ def scrape_info():
     df.reset_index(inplace = True) 
     df.columns = ['Id', 'Specifications', 'Mars', 'Earth']
     html_table = df.to_html()
-    html_table = html_table.replace('\n', '') 
+   
 
     #--------------------------------------------------------------------------
     # NASA Mars Hemispheres
@@ -86,33 +86,38 @@ def scrape_info():
     # @TODO: YOUR CODE HERE!
 
     results1 = soup.find_all('div', class_='description')
-    title = []  
-    img_url = []
     
 
+    hemi_titles_and_links = []
+
     for result in results1:
+        
+        hemisphere_dict = {
+            "title": "",
+            "link": ""
+        }
+
         # Identify and return href (eg:cerberus.html, schiaparelli.html, syrtis.html, valles.html)
         relative_image_path = result.find('a')['href']
         print(relative_image_path)
         browser.visit(url + relative_image_path)
         time.sleep(1)
+        
         html = browser.html
         soup = BeautifulSoup(html, 'html.parser')
         image_title = soup.find('h2', class_="title").text
-        print(image_title)
+        #print(image_title)
+        
         results2 = soup.find('div', class_="wide-image-wrapper" )
         image_link = results2.find('a')['href']
         full_image_link = url + image_link 
-        #full_image_link = browser.click_link_by_href(full_image_link)
-        print(full_image_link)
-        title.append(image_title)
-        img_url.append(full_image_link)
+        #print(full_image_link)
+        
+        
         # Store data in a dictionary
-    hemisphere_data = {
-        "image_title": image_title,
-        "full_image_link": full_image_link
-        }
-
+        hemisphere_dict["title"] = image_title
+        hemisphere_dict["link"] = full_image_link
+        hemi_titles_and_links.append(hemisphere_dict)
 
     # Store data in a dictionary
     mars_data = {
@@ -120,8 +125,8 @@ def scrape_info():
         "news_title": news_title,
         "news_para": news_para,
         "html_table": html_table,
-        "title": title,
-        "img_url": img_url 
+        "hemisphere": hemi_titles_and_links, 
+
     }
 
     # Quite the browser after scraping
