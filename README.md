@@ -1,4 +1,4 @@
-# **Web-Scraping-Cchallenge - Mission to Mars**
+# **Web Scraping Challenge - Mission to Mars**
 
 ![Mission to Mars](Images/marscraft.jpg)
 
